@@ -127,17 +127,19 @@ function AppContent() {
   return (
     <div className="app">
       <header className="project-header">
-        <div className="site-title">Beat Box Visualizer</div>
-        <div className="project-info">
-          <input
-            type="text"
-            value={project.name}
-            onChange={(e) => updateProject({ name: e.target.value })}
-            className="project-name-input"
-          />
-          <span className="project-meta">
-            {project.tracks.length} tracks • {project.tempo} BPM
-          </span>
+        <div className="header-left">
+          <div className="site-title">Beat Box Visualizer</div>
+          <div className="project-info">
+            <input
+              type="text"
+              value={project.name}
+              onChange={(e) => updateProject({ name: e.target.value })}
+              className="project-name-input"
+            />
+            <span className="project-meta">
+              {project.tracks.length} tracks • {project.tempo} BPM
+            </span>
+          </div>
         </div>
 
         <div className="header-actions">
