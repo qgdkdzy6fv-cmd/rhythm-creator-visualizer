@@ -52,24 +52,17 @@ body {
 
 .project-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 12px;
   padding: 16px 24px;
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border-color);
 }
 
-.header-left {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: flex-start;
-}
-
 .site-title {
   font-size: 2rem;
   font-weight: 700;
-  text-align: left;
+  text-align: center;
   color: var(--accent-primary);
   letter-spacing: 0.5px;
 }
@@ -78,6 +71,7 @@ body {
   display: flex;
   align-items: center;
   gap: 16px;
+  justify-content: center;
 }
 
 .project-name-input {
@@ -105,24 +99,18 @@ body {
 .header-actions {
   display: flex;
   gap: 12px;
-  align-items: center;
+  justify-content: center;
 }
 
 .theme-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background: var(--bg-tertiary);
   color: var(--text-primary);
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  padding: 8px;
+  font-size: 1.25rem;
+  padding: 8px 12px;
   transition: all 0.2s;
-}
-
-.theme-toggle svg {
-  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 .theme-toggle:hover {
@@ -130,21 +118,12 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.theme-toggle:hover svg {
-  transform: rotate(15deg);
-}
-
-.theme-toggle:focus {
-  outline: 2px solid var(--accent-primary);
-  outline-offset: 2px;
-}
-
 .main-content {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 16px;
   padding: 16px;
-  height: calc(100vh - 105px);
+  height: calc(100vh - 145px);
   overflow: hidden;
 }
 
