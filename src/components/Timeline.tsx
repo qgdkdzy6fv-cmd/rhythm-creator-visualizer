@@ -22,8 +22,6 @@ interface ContextMenuState {
 export function Timeline({ track, onUpdateNote, onDeleteNote }: TimelineProps) {
   const [dragState, setDragState] = useState<DragState | null>(null);
   const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [noteToDelete, setNoteToDelete] = useState<string | null>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
 
   // Duration mapping for visual representation
@@ -105,35 +103,13 @@ export function Timeline({ track, onUpdateNote, onDeleteNote }: TimelineProps) {
 
   /**
    * Feature 2: Right-Click Note Deletion
-   * Initiates delete confirmation dialog
+   * Executes note deletion directly without confirmation
    */
   const handleDeleteFromContextMenu = () => {
     if (contextMenu) {
-      setNoteToDelete(contextMenu.noteId);
-      setShowDeleteConfirm(true);
+      onDeleteNote(contextMenu.noteId);
       setContextMenu(null);
     }
-  };
-
-  /**
-   * Feature 2: Right-Click Note Deletion
-   * Confirms and executes note deletion
-   */
-  const confirmDelete = () => {
-    if (noteToDelete) {
-      onDeleteNote(noteToDelete);
-      setNoteToDelete(null);
-      setShowDeleteConfirm(false);
-    }
-  };
-
-  /**
-   * Feature 2: Right-Click Note Deletion
-   * Cancels deletion
-   */
-  const cancelDelete = () => {
-    setNoteToDelete(null);
-    setShowDeleteConfirm(false);
   };
 
   // Close context menu when clicking outside
@@ -201,23 +177,6 @@ export function Timeline({ track, onUpdateNote, onDeleteNote }: TimelineProps) {
         </div>
       )}
 
-      {/* Delete Confirmation Dialog */}
-      {showDeleteConfirm && (
-        <div className="modal-overlay" onClick={cancelDelete}>
-          <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
-            <h3>Confirm Deletion</h3>
-            <p>Are you sure you want to delete this note? This action cannot be undone.</p>
-            <div className="modal-actions">
-              <button onClick={cancelDelete} className="btn-secondary">
-                Cancel
-              </button>
-              <button onClick={confirmDelete} className="btn-danger">
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
