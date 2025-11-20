@@ -6,6 +6,8 @@ import { audioEngine } from './lib/audioEngine';
 import { WaveformVisualizer } from './components/visualizers/WaveformVisualizer';
 import { BarsVisualizer } from './components/visualizers/BarsVisualizer';
 import { CircularVisualizer } from './components/visualizers/CircularVisualizer';
+import { Timeline } from './components/Timeline';
+import { TrackHeader } from './components/TrackHeader';
 import { COLOR_PALETTE, type Pitch, type NoteDuration, type InstrumentType, type TimeSignature, type VisualizerType } from './types';
 import './App.css';
 
@@ -16,7 +18,7 @@ const NOTE_DURATIONS: NoteDuration[] = ['whole', 'half', 'quarter', 'eighth', 's
 const OCTAVES = [1, 2, 3, 4, 5, 6, 7, 8];
 
 function AppContent() {
-  const { project, createProject, currentTrack, setCurrentTrack, addTrack, updateTrack, deleteTrack, addNote, deleteNote, updateProject, updateVisualizerSettings } = useProject();
+  const { project, createProject, currentTrack, setCurrentTrack, addTrack, updateTrack, deleteTrack, addNote, updateNote, deleteNote, updateProject, updateVisualizerSettings } = useProject();
   const { theme, toggleTheme } = useTheme();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -262,40 +264,19 @@ function AppContent() {
                 project.tracks.map(track => (
                   <div
                     key={track.id}
-                    className={`track-item ${currentTrack?.id === track.id ? 'selected' : ''}`}
+                    className={`track-item ${currentTrack?.id === track.id ? 'selected' : ''} ${!track.isExpanded ? 'collapsed' : ''}`}
                     onClick={() => setCurrentTrack(track)}
                   >
-                    <div className="track-header">
-                      <div className="track-info">
-                        <h3>{track.name}</h3>
-                        <span className="track-meta">
-                          {track.instrumentType} • {track.timeSignature} • {track.notes.length} notes
-                        </span>
-                      </div>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          deleteTrack(track.id);
-                        }}
-                        className="delete-track-btn"
-                        aria-label="Delete track"
-                      >
-                        ×
-                      </button>
-                    </div>
+                    <TrackHeader
+                      track={track}
+                      isSelected={currentTrack?.id === track.id}
+                      onSelect={() => setCurrentTrack(track)}
+                      onUpdateTrack={(updates) => updateTrack(track.id, updates)}
+                      onDelete={() => deleteTrack(track.id)}
+                    />
 
-                    {currentTrack?.id === track.id && (
+                    {track.isExpanded && currentTrack?.id === track.id && (
                       <div className="track-controls">
-                        <div className="control-group">
-                          <label>Track Name</label>
-                          <input
-                            type="text"
-                            value={track.name}
-                            onChange={(e) => updateTrack(track.id, { name: e.target.value })}
-                            className="track-name-input"
-                          />
-                        </div>
-
                         <div className="control-group">
                           <label>Instrument</label>
                           <select
@@ -439,43 +420,11 @@ function AppContent() {
                   </button>
                 </div>
 
-                <div className="timeline-view">
-                  <h3>Timeline</h3>
-                  <div className="piano-roll">
-                    <div className="piano-roll-grid">
-                      {Array.from({ length: 16 }, (_, i) => (
-                        <div key={i} className={`bar-line ${i % 4 === 0 ? 'measure-start' : ''}`}>
-                          <span className="bar-label">{i}</span>
-                        </div>
-                      ))}
-                      {currentTrack.notes.map(note => {
-                        const durationMap = {
-                          whole: 4,
-                          half: 2,
-                          quarter: 1,
-                          eighth: 0.5,
-                          sixteenth: 0.25
-                        };
-                        const width = durationMap[note.duration] * 60;
-                        const left = note.position * 60;
-                        return (
-                          <div
-                            key={note.id}
-                            className="note-block"
-                            style={{
-                              left: `${left}px`,
-                              width: `${width}px`
-                            }}
-                            onClick={() => deleteNote(note.id)}
-                            title={`${note.pitch}${note.octave} • ${note.duration} • Pos: ${note.position} • Click to delete`}
-                          >
-                            <span className="note-label">{note.pitch}{note.octave}</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
+                <Timeline
+                  track={currentTrack}
+                  onUpdateNote={updateNote}
+                  onDeleteNote={deleteNote}
+                />
 
                 <div className="notes-list">
                   <h3>Notes ({currentTrack.notes.length})</h3>

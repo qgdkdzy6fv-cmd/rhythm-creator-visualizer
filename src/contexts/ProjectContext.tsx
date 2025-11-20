@@ -11,6 +11,7 @@ interface ProjectContextType {
   updateTrack: (trackId: string, updates: Partial<Track>) => void;
   deleteTrack: (trackId: string) => void;
   addNote: (trackId: string, note: Omit<Note, 'id' | 'trackId'>) => void;
+  updateNote: (noteId: string, updates: Partial<Note>) => void;
   deleteNote: (noteId: string) => void;
   updateVisualizerSettings: (settings: Partial<VisualizerSettings>) => void;
 }
@@ -59,7 +60,8 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
       muted: false,
       solo: false,
       orderIndex: project.tracks.length,
-      notes: []
+      notes: [],
+      isExpanded: true
     };
 
     setProject({
@@ -71,12 +73,21 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
   const updateTrack = (trackId: string, updates: Partial<Track>) => {
     if (!project) return;
 
+    const updatedTracks = project.tracks.map(track =>
+      track.id === trackId ? { ...track, ...updates } : track
+    );
+
     setProject({
       ...project,
-      tracks: project.tracks.map(track =>
-        track.id === trackId ? { ...track, ...updates } : track
-      )
+      tracks: updatedTracks
     });
+
+    if (currentTrack?.id === trackId) {
+      const updatedCurrentTrack = updatedTracks.find(t => t.id === trackId);
+      if (updatedCurrentTrack) {
+        setCurrentTrack(updatedCurrentTrack);
+      }
+    }
   };
 
   const deleteTrack = (trackId: string) => {
@@ -114,6 +125,29 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
 
     if (currentTrack?.id === trackId) {
       const updatedCurrentTrack = updatedTracks.find(t => t.id === trackId);
+      if (updatedCurrentTrack) {
+        setCurrentTrack(updatedCurrentTrack);
+      }
+    }
+  };
+
+  const updateNote = (noteId: string, updates: Partial<Note>) => {
+    if (!project) return;
+
+    const updatedTracks = project.tracks.map(track => ({
+      ...track,
+      notes: track.notes.map(note =>
+        note.id === noteId ? { ...note, ...updates } : note
+      )
+    }));
+
+    setProject({
+      ...project,
+      tracks: updatedTracks
+    });
+
+    if (currentTrack) {
+      const updatedCurrentTrack = updatedTracks.find(t => t.id === currentTrack.id);
       if (updatedCurrentTrack) {
         setCurrentTrack(updatedCurrentTrack);
       }
@@ -164,6 +198,7 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
         updateTrack,
         deleteTrack,
         addNote,
+        updateNote,
         deleteNote,
         updateVisualizerSettings
       }}
