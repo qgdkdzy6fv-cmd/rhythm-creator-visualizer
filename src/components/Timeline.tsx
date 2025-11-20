@@ -22,6 +22,7 @@ interface ContextMenuState {
 export function Timeline({ track, onUpdateNote, onDeleteNote }: TimelineProps) {
   const [dragState, setDragState] = useState<DragState | null>(null);
   const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null);
+  const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
 
   // Duration mapping for visual representation
@@ -37,11 +38,19 @@ export function Timeline({ track, onUpdateNote, onDeleteNote }: TimelineProps) {
   const GRID_SIZE = 60;
 
   /**
+   * Note Selection: Handle click to select note
+   * Distinguishes between click (selection) and drag
+   */
+  const handleNoteClick = (e: React.MouseEvent, note: Note) => {
+    e.stopPropagation();
+    setSelectedNoteId(note.id);
+  };
+
+  /**
    * Feature 1: Drag and Drop Notes
    * Handles the start of a drag operation when left mouse button is pressed
    */
   const handleNoteMouseDown = (e: React.MouseEvent, note: Note) => {
-    // Only handle left click for dragging
     if (e.button !== 0) return;
 
     e.preventDefault();
@@ -112,6 +121,22 @@ export function Timeline({ track, onUpdateNote, onDeleteNote }: TimelineProps) {
     }
   };
 
+  /**
+   * Velocity Control: Update note velocity
+   */
+  const handleVelocityChange = (velocity: number) => {
+    if (selectedNoteId) {
+      onUpdateNote(selectedNoteId, { velocity });
+    }
+  };
+
+  /**
+   * Deselect note when clicking outside
+   */
+  const handleTimelineClick = () => {
+    setSelectedNoteId(null);
+  };
+
   // Close context menu when clicking outside
   useEffect(() => {
     const handleClick = () => setContextMenu(null);
@@ -121,11 +146,28 @@ export function Timeline({ track, onUpdateNote, onDeleteNote }: TimelineProps) {
     }
   }, [contextMenu]);
 
+  // Handle Escape key to deselect note
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSelectedNoteId(null);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // Get selected note data
+  const selectedNote = selectedNoteId
+    ? track.notes.find(note => note.id === selectedNoteId)
+    : null;
+
   return (
     <div className="timeline-container">
       <div className="timeline-view">
         <h3>Timeline</h3>
-        <div className="piano-roll" ref={timelineRef}>
+        <div className="piano-roll" ref={timelineRef} onClick={handleTimelineClick}>
           <div className="piano-roll-grid">
             {/* Bar lines with labels */}
             {Array.from({ length: 16 }, (_, i) => (
@@ -134,23 +176,29 @@ export function Timeline({ track, onUpdateNote, onDeleteNote }: TimelineProps) {
               </div>
             ))}
 
-            {/* Render notes with drag and context menu handlers */}
+            {/* Render notes with selection, drag, and context menu handlers */}
             {track.notes.map(note => {
               const width = durationMap[note.duration] * GRID_SIZE;
               const left = note.position * GRID_SIZE;
               const isDragging = dragState?.noteId === note.id;
+              const isSelected = selectedNoteId === note.id;
+
+              // Visual feedback: opacity based on velocity (0.4 - 1.0 range)
+              const velocityOpacity = 0.4 + (note.velocity * 0.6);
 
               return (
                 <div
                   key={note.id}
-                  className={`note-block ${isDragging ? 'dragging' : ''}`}
+                  className={`note-block ${isDragging ? 'dragging' : ''} ${isSelected ? 'selected' : ''}`}
                   style={{
                     left: `${left}px`,
-                    width: `${width}px`
+                    width: `${width}px`,
+                    opacity: velocityOpacity
                   }}
+                  onClick={(e) => handleNoteClick(e, note)}
                   onMouseDown={(e) => handleNoteMouseDown(e, note)}
                   onContextMenu={(e) => handleNoteContextMenu(e, note)}
-                  title={`${note.pitch}${note.octave} • ${note.duration} • Pos: ${note.position}\nLeft-click to drag • Right-click to delete`}
+                  title={`${note.pitch}${note.octave} • ${note.duration} • Pos: ${note.position} • Velocity: ${Math.round(note.velocity * 127)}\nClick to select • Drag to move • Right-click to delete`}
                 >
                   <span className="note-label">{note.pitch}{note.octave}</span>
                 </div>
@@ -159,6 +207,63 @@ export function Timeline({ track, onUpdateNote, onDeleteNote }: TimelineProps) {
           </div>
         </div>
       </div>
+
+      {/* Velocity Control Panel */}
+      {selectedNote && (
+        <div className="velocity-control-panel">
+          <div className="velocity-control-header">
+            <h4>Velocity Control</h4>
+            <button
+              className="close-btn"
+              onClick={() => setSelectedNoteId(null)}
+              aria-label="Close velocity control"
+            >
+              ×
+            </button>
+          </div>
+
+          <div className="velocity-info">
+            <span className="note-info">
+              {selectedNote.pitch}{selectedNote.octave} • {selectedNote.duration}
+            </span>
+            <span className="velocity-value">
+              {Math.round(selectedNote.velocity * 127)}
+            </span>
+          </div>
+
+          <div className="velocity-slider-container">
+            <label htmlFor="velocity-slider">
+              Velocity (0-127)
+            </label>
+            <input
+              id="velocity-slider"
+              type="range"
+              min="0"
+              max="127"
+              value={Math.round(selectedNote.velocity * 127)}
+              onChange={(e) => handleVelocityChange(parseInt(e.target.value) / 127)}
+              className="velocity-slider"
+            />
+            <div className="velocity-markers">
+              <span>0 (Silent)</span>
+              <span>64 (Medium)</span>
+              <span>127 (Full)</span>
+            </div>
+          </div>
+
+          <div className="velocity-presets">
+            <button onClick={() => handleVelocityChange(0.2)}>pp</button>
+            <button onClick={() => handleVelocityChange(0.4)}>p</button>
+            <button onClick={() => handleVelocityChange(0.6)}>mf</button>
+            <button onClick={() => handleVelocityChange(0.8)}>f</button>
+            <button onClick={() => handleVelocityChange(1.0)}>ff</button>
+          </div>
+
+          <div className="velocity-hint">
+            Press Escape to deselect
+          </div>
+        </div>
+      )}
 
       {/* Context Menu for right-click */}
       {contextMenu && (
