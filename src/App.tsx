@@ -439,6 +439,44 @@ function AppContent() {
                   </button>
                 </div>
 
+                <div className="timeline-view">
+                  <h3>Timeline</h3>
+                  <div className="piano-roll">
+                    <div className="piano-roll-grid">
+                      {Array.from({ length: 16 }, (_, i) => (
+                        <div key={i} className={`bar-line ${i % 4 === 0 ? 'measure-start' : ''}`}>
+                          <span className="bar-label">{i}</span>
+                        </div>
+                      ))}
+                      {currentTrack.notes.map(note => {
+                        const durationMap = {
+                          whole: 4,
+                          half: 2,
+                          quarter: 1,
+                          eighth: 0.5,
+                          sixteenth: 0.25
+                        };
+                        const width = durationMap[note.duration] * 60;
+                        const left = note.position * 60;
+                        return (
+                          <div
+                            key={note.id}
+                            className="note-block"
+                            style={{
+                              left: `${left}px`,
+                              width: `${width}px`
+                            }}
+                            onClick={() => deleteNote(note.id)}
+                            title={`${note.pitch}${note.octave} • ${note.duration} • Pos: ${note.position} • Click to delete`}
+                          >
+                            <span className="note-label">{note.pitch}{note.octave}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+
                 <div className="notes-list">
                   <h3>Notes ({currentTrack.notes.length})</h3>
                   {currentTrack.notes.length === 0 ? (

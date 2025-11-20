@@ -531,6 +531,151 @@ body {
   padding: 40px 20px;
 }
 
+.timeline-view {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.timeline-view h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.piano-roll {
+  background: var(--bg-tertiary);
+  border-radius: 8px;
+  padding: 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.piano-roll-grid {
+  position: relative;
+  height: 80px;
+  min-width: 960px;
+}
+
+.bar-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  border-left: 1px solid var(--border-color);
+}
+
+.bar-line.measure-start {
+  border-left: 2px solid var(--accent-primary);
+}
+
+.bar-line:nth-child(1) {
+  left: 0;
+}
+
+.bar-line:nth-child(2) {
+  left: 60px;
+}
+
+.bar-line:nth-child(3) {
+  left: 120px;
+}
+
+.bar-line:nth-child(4) {
+  left: 180px;
+}
+
+.bar-line:nth-child(5) {
+  left: 240px;
+}
+
+.bar-line:nth-child(6) {
+  left: 300px;
+}
+
+.bar-line:nth-child(7) {
+  left: 360px;
+}
+
+.bar-line:nth-child(8) {
+  left: 420px;
+}
+
+.bar-line:nth-child(9) {
+  left: 480px;
+}
+
+.bar-line:nth-child(10) {
+  left: 540px;
+}
+
+.bar-line:nth-child(11) {
+  left: 600px;
+}
+
+.bar-line:nth-child(12) {
+  left: 660px;
+}
+
+.bar-line:nth-child(13) {
+  left: 720px;
+}
+
+.bar-line:nth-child(14) {
+  left: 780px;
+}
+
+.bar-line:nth-child(15) {
+  left: 840px;
+}
+
+.bar-line:nth-child(16) {
+  left: 900px;
+}
+
+.bar-label {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  font-size: 0.625rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  opacity: 0.7;
+}
+
+.note-block {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 40px;
+  background: var(--accent-primary);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border: 2px solid transparent;
+}
+
+.note-block:hover {
+  background: var(--accent-secondary);
+  transform: translateY(-50%) scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border-color: var(--text-primary);
+  z-index: 10;
+}
+
+.note-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: white;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
 @media (max-width: 1200px) {
   .main-content {
     grid-template-columns: 1fr;
