@@ -908,9 +908,19 @@ body {
 
 /* Note Selection Styles */
 .note-block.selected {
-  border: 3px solid var(--accent-primary);
-  box-shadow: 0 0 12px rgba(78, 205, 196, 0.6);
+  border: 2px solid var(--accent-primary);
+  box-shadow:
+    0 0 0 1px var(--accent-primary),
+    0 4px 12px rgba(78, 205, 196, 0.4);
   z-index: 50;
+  background: var(--accent-primary);
+}
+
+.note-block.selected:hover {
+  border: 2px solid var(--accent-primary);
+  box-shadow:
+    0 0 0 2px var(--accent-primary),
+    0 6px 16px rgba(78, 205, 196, 0.5);
 }
 
 /* Velocity Control Panel */
