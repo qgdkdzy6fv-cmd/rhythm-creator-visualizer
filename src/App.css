@@ -755,8 +755,9 @@ body {
   display: flex;
   align-items: center;
   padding: 0 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  border: 2px solid transparent;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  z-index: 2;
 }
 
 .note-block::before {
@@ -775,10 +776,10 @@ body {
 
 .note-block:hover {
   background: var(--accent-secondary);
-  transform: translateY(-50%) scale(1.05);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transform: translateY(-50%) scale(1.08);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
   border-color: var(--text-primary);
-  z-index: 10;
+  z-index: 20;
 }
 
 .note-label {
@@ -1356,7 +1357,7 @@ body {
   user-select: none;
 }
 
-/* Tracks Container */
+/* Tracks Container - Layered View */
 .tracks-container {
   background: var(--bg-secondary);
   max-height: 500px;
@@ -1364,6 +1365,19 @@ body {
   overflow-x: hidden;
   scrollbar-width: thin;
   scrollbar-color: var(--accent-primary) var(--bg-secondary);
+  position: relative;
+  padding-bottom: 8px;
+}
+
+.tracks-container::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: linear-gradient(to top, var(--bg-secondary), transparent);
+  pointer-events: none;
 }
 
 .tracks-container::-webkit-scrollbar {
@@ -1380,20 +1394,30 @@ body {
   border: 2px solid var(--bg-secondary);
 }
 
-/* Track Row Wrapper */
+/* Track Row Wrapper - Layered with Overlap */
 .track-row-wrapper {
   position: relative;
   border-bottom: 1px solid var(--border-color);
-  transition: background 0.2s ease;
+  transition: all 0.2s ease;
+  margin-top: -8px;
+  z-index: 1;
+}
+
+.track-row-wrapper:first-child {
+  margin-top: 0;
 }
 
 .track-row-wrapper:hover {
   background: rgba(255, 255, 255, 0.02);
+  z-index: 10;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .track-row-wrapper.drag-over {
   border-top: 3px solid var(--accent-primary);
   background: rgba(78, 205, 196, 0.1);
+  z-index: 15;
 }
 
 .drag-handle {
@@ -1423,17 +1447,20 @@ body {
   cursor: grabbing;
 }
 
-/* Track Row */
+/* Track Row - Bars Inline with Track */
 .track-row {
   display: flex;
   height: 70px;
   background: transparent;
-  transition: background 0.2s ease;
+  transition: all 0.2s ease;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .track-row.selected {
   background: rgba(78, 205, 196, 0.05);
   border-left: 3px solid var(--accent-primary);
+  box-shadow: 0 3px 8px rgba(78, 205, 196, 0.3);
 }
 
 /* Track Controls - Left Side */
@@ -1447,6 +1474,9 @@ body {
   flex-direction: column;
   gap: 4px;
   justify-content: center;
+  position: relative;
+  z-index: 3;
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
 }
 
 .track-info {
@@ -1563,7 +1593,7 @@ body {
   text-align: right;
 }
 
-/* Track Timeline - Right Side */
+/* Track Timeline - Right Side - Bars Inline */
 .track-timeline {
   flex: 1;
   position: relative;
@@ -1579,6 +1609,9 @@ body {
   );
   scrollbar-width: thin;
   scrollbar-color: var(--accent-primary) transparent;
+  z-index: 1;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .track-timeline::-webkit-scrollbar {
