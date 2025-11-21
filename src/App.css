@@ -24,6 +24,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background: var(--bg-primary);
   color: var(--text-primary);
@@ -185,9 +189,12 @@ body {
   border-radius: 8px;
   padding: 20px;
   overflow-y: auto;
+  overflow-x: hidden;
   border: 1px solid var(--border-color);
   scrollbar-width: thin;
   scrollbar-color: var(--accent-primary) var(--bg-tertiary);
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 .left-panel::-webkit-scrollbar,
@@ -555,6 +562,8 @@ body {
   flex-direction: column;
   gap: 20px;
   height: 100%;
+  overflow-y: auto;
+  scroll-behavior: smooth;
 }
 
 .note-editor-header h2 {
@@ -579,6 +588,10 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  flex: 1;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  max-height: calc(100vh - 400px);
 }
 
 .notes-list h3 {
@@ -769,6 +782,21 @@ body {
   padding: 0 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   border: 2px solid transparent;
+  position: relative;
+}
+
+.note-block::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: var(--accent-primary);
+  border-radius: 4px;
+  z-index: -1;
+  opacity: var(--note-velocity-opacity, 1);
+  transition: opacity 0.1s;
 }
 
 .note-block:hover {
@@ -1024,7 +1052,11 @@ body {
     0 0 0 1px var(--accent-primary),
     0 4px 12px rgba(78, 205, 196, 0.4);
   z-index: 50;
-  background: var(--accent-primary);
+  background: transparent;
+}
+
+.note-block.selected::before {
+  opacity: var(--note-velocity-opacity, 1);
 }
 
 .note-block.selected:hover {
@@ -1032,6 +1064,7 @@ body {
   box-shadow:
     0 0 0 2px var(--accent-primary),
     0 6px 16px rgba(78, 205, 196, 0.5);
+  background: transparent;
 }
 
 /* Velocity Control Panel */

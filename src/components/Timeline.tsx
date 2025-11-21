@@ -169,10 +169,10 @@ export function Timeline({ track, onUpdateNote, onDeleteNote }: TimelineProps) {
         <h3>Timeline</h3>
         <div className="piano-roll" ref={timelineRef} onClick={handleTimelineClick}>
           <div className="piano-roll-grid">
-            {/* Bar lines with labels */}
+            {/* Bar lines with labels (1-based counting) */}
             {Array.from({ length: 16 }, (_, i) => (
               <div key={i} className={`bar-line ${i % 4 === 0 ? 'measure-start' : ''}`}>
-                <span className="bar-label">{i}</span>
+                <span className="bar-label">{i + 1}</span>
               </div>
             ))}
 
@@ -193,12 +193,12 @@ export function Timeline({ track, onUpdateNote, onDeleteNote }: TimelineProps) {
                   style={{
                     left: `${left}px`,
                     width: `${width}px`,
-                    opacity: velocityOpacity
-                  }}
+                    '--note-velocity-opacity': velocityOpacity
+                  } as React.CSSProperties}
                   onClick={(e) => handleNoteClick(e, note)}
                   onMouseDown={(e) => handleNoteMouseDown(e, note)}
                   onContextMenu={(e) => handleNoteContextMenu(e, note)}
-                  title={`${note.pitch}${note.octave} • ${note.duration} • Pos: ${note.position} • Velocity: ${Math.round(note.velocity * 127)}\nClick to select • Drag to move • Right-click to delete`}
+                  title={`${note.pitch}${note.octave} • ${note.duration} • Pos: ${note.position + 1} • Velocity: ${Math.round(note.velocity * 127)}\nClick to select • Drag to move • Right-click to delete`}
                 >
                   <span className="note-label">{note.pitch}{note.octave}</span>
                 </div>
