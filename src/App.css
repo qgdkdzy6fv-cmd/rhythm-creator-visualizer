@@ -709,7 +709,7 @@ body {
 .piano-roll-grid {
   position: relative;
   height: 80px;
-  min-width: 960px;
+  min-width: 7680px; /* 128 bars × 60px per bar */
 }
 
 .bar-line {
@@ -722,70 +722,6 @@ body {
 
 .bar-line.measure-start {
   border-left: 2px solid var(--accent-primary);
-}
-
-.bar-line:nth-child(1) {
-  left: 0;
-}
-
-.bar-line:nth-child(2) {
-  left: 60px;
-}
-
-.bar-line:nth-child(3) {
-  left: 120px;
-}
-
-.bar-line:nth-child(4) {
-  left: 180px;
-}
-
-.bar-line:nth-child(5) {
-  left: 240px;
-}
-
-.bar-line:nth-child(6) {
-  left: 300px;
-}
-
-.bar-line:nth-child(7) {
-  left: 360px;
-}
-
-.bar-line:nth-child(8) {
-  left: 420px;
-}
-
-.bar-line:nth-child(9) {
-  left: 480px;
-}
-
-.bar-line:nth-child(10) {
-  left: 540px;
-}
-
-.bar-line:nth-child(11) {
-  left: 600px;
-}
-
-.bar-line:nth-child(12) {
-  left: 660px;
-}
-
-.bar-line:nth-child(13) {
-  left: 720px;
-}
-
-.bar-line:nth-child(14) {
-  left: 780px;
-}
-
-.bar-line:nth-child(15) {
-  left: 840px;
-}
-
-.bar-line:nth-child(16) {
-  left: 900px;
 }
 
 .bar-label {

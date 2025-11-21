@@ -168,9 +168,13 @@ export function Timeline({ track, onUpdateNote, onDeleteNote }: TimelineProps) {
       <div className="timeline-view">
         <div className="piano-roll" ref={timelineRef} onClick={handleTimelineClick}>
           <div className="piano-roll-grid">
-            {/* Bar lines with labels (1-based counting) */}
-            {Array.from({ length: 16 }, (_, i) => (
-              <div key={i} className={`bar-line ${i % 4 === 0 ? 'measure-start' : ''}`}>
+            {/* Bar lines with labels (1-based counting) - Extended to 128 bars */}
+            {Array.from({ length: 128 }, (_, i) => (
+              <div
+                key={i}
+                className={`bar-line ${i % 4 === 0 ? 'measure-start' : ''}`}
+                style={{ left: `${i * GRID_SIZE}px` }}
+              >
                 <span className="bar-label">{i + 1}</span>
               </div>
             ))}
