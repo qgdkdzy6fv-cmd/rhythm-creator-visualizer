@@ -120,7 +120,7 @@ export class AudioEngine {
     if (!synth) return;
 
     if (track.loop && track.notes.length > 0) {
-      const maxPosition = Math.max(...track.notes.map(n => n.position)) + 4;
+      const loopLength = track.measures || 4;
 
       track.notes.forEach(note => {
         const noteName = `${note.pitch}${note.octave}`;
@@ -128,7 +128,7 @@ export class AudioEngine {
 
         Tone.getTransport().scheduleRepeat((time) => {
           synth.triggerAttackRelease(noteName, durationSeconds, time, note.velocity);
-        }, `${maxPosition}:0:0`, `0:${note.position}:0`);
+        }, `${loopLength}:0:0`, `0:${note.position}:0`);
       });
     } else {
       track.notes.forEach(note => {

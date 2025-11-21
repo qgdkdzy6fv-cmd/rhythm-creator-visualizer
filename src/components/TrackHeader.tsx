@@ -171,6 +171,27 @@ export function TrackHeader({ track, onUpdateTrack, onDelete }: TrackHeaderProps
         </div>
       </div>
 
+      {/* Measures Control */}
+      <div className="measures-control">
+        <label htmlFor={`measures-${track.id}`}>Measures:</label>
+        <input
+          id={`measures-${track.id}`}
+          type="number"
+          min="1"
+          max="32"
+          value={track.measures}
+          onChange={(e) => {
+            const value = parseInt(e.target.value);
+            if (!isNaN(value) && value >= 1 && value <= 32) {
+              onUpdateTrack({ measures: value });
+            }
+          }}
+          onClick={(e) => e.stopPropagation()}
+          className="measures-input"
+          title="Number of measures for this track"
+        />
+      </div>
+
       {/* Delete Button */}
       <button
         onClick={(e) => {
