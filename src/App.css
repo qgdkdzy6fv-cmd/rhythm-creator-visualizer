@@ -1412,32 +1412,6 @@ body {
   z-index: 15;
 }
 
-.drag-handle {
-  position: absolute;
-  left: 4px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 20px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: grab;
-  color: var(--text-secondary);
-  font-size: 1rem;
-  opacity: 0.4;
-  transition: opacity 0.2s ease;
-  user-select: none;
-  z-index: 5;
-}
-
-.track-row-wrapper:hover .drag-handle {
-  opacity: 1;
-}
-
-.drag-handle:active {
-  cursor: grabbing;
-}
 
 /* Track Row - Bars Inline with Track */
 .track-row {
@@ -1455,11 +1429,55 @@ body {
   box-shadow: 0 3px 8px rgba(78, 205, 196, 0.3);
 }
 
+/* Track Drag Handle - 6 Dots */
+.track-drag-handle {
+  width: 24px;
+  min-width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  cursor: grab;
+  position: relative;
+  z-index: 4;
+  transition: background 0.2s ease;
+}
+
+.track-drag-handle:hover {
+  background: var(--bg-tertiary);
+}
+
+.track-drag-handle:active {
+  cursor: grabbing;
+}
+
+.drag-dots {
+  display: grid;
+  grid-template-columns: repeat(2, 4px);
+  grid-template-rows: repeat(3, 4px);
+  gap: 3px;
+  padding: 4px;
+}
+
+.drag-dots span {
+  width: 4px;
+  height: 4px;
+  background: var(--text-secondary);
+  border-radius: 50%;
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+}
+
+.track-drag-handle:hover .drag-dots span {
+  opacity: 0.8;
+}
+
 /* Track Controls - Left Side */
 .track-controls {
   width: 240px;
   min-width: 240px;
-  padding: 8px 12px 8px 32px;
+  padding: 8px 12px;
   background: var(--bg-primary);
   border-right: 2px solid var(--border-color);
   display: flex;
@@ -1709,8 +1727,4 @@ body {
     font-size: 0.7rem;
   }
 
-  .drag-handle {
-    left: 2px;
-    width: 16px;
-  }
 }

@@ -11,6 +11,8 @@ interface TrackRowProps {
   onUpdateTrack: (trackId: string, updates: Partial<Track>) => void;
   selectedNoteId: string | null;
   onSelectNote: (noteId: string | null) => void;
+  onDragStart: (e: React.DragEvent) => void;
+  onDragEnd: () => void;
 }
 
 interface DragState {
@@ -37,7 +39,9 @@ export function TrackRow({
   onSelectTrack,
   onUpdateTrack,
   selectedNoteId,
-  onSelectNote
+  onSelectNote,
+  onDragStart,
+  onDragEnd
 }: TrackRowProps) {
   const [dragState, setDragState] = useState<DragState | null>(null);
   const trackRowRef = useRef<HTMLDivElement>(null);
@@ -151,6 +155,24 @@ export function TrackRow({
 
   return (
     <div className={`track-row ${isSelected ? 'selected' : ''}`} style={{ backgroundColor: `${track.color}08` }}>
+      {/* Drag Handle - Left Edge */}
+      <div
+        className="track-drag-handle"
+        draggable
+        onDragStart={onDragStart}
+        onDragEnd={onDragEnd}
+        title="Drag to reorder track"
+      >
+        <div className="drag-dots">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
       {/* Track Controls - Left Side */}
       <div className="track-controls">
         <div className="track-info-with-buttons">

@@ -94,15 +94,9 @@ export function MultiTrackTimeline({
           <div
             key={track.id}
             className={`track-row-wrapper ${dragOverTrackId === track.id ? 'drag-over' : ''}`}
-            draggable
-            onDragStart={(e) => handleTrackDragStart(track.id, e)}
             onDragOver={(e) => handleTrackDragOver(track.id, e)}
             onDrop={(e) => handleTrackDrop(track.id, e)}
-            onDragEnd={handleTrackDragEnd}
           >
-            <div className="drag-handle" title="Drag to reorder tracks">
-              <span>⋮⋮</span>
-            </div>
             <TrackRow
               track={track}
               isSelected={selectedTrackId === track.id}
@@ -113,6 +107,8 @@ export function MultiTrackTimeline({
               onUpdateTrack={onUpdateTrack}
               selectedNoteId={selectedNoteId}
               onSelectNote={onSelectNote}
+              onDragStart={(e) => handleTrackDragStart(track.id, e)}
+              onDragEnd={handleTrackDragEnd}
             />
           </div>
         ))}
