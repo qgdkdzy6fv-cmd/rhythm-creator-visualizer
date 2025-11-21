@@ -152,24 +152,46 @@ function AppContent() {
         </div>
       </header>
 
-      {/* Timeline Tile - Top Section */}
-      {currentTrack && (
-        <div className="timeline-tile">
-          <div className="timeline-tile-header">
-            <h2>Timeline - {currentTrack.name}</h2>
+      {/* Timeline Tile - Always Visible from Startup */}
+      <div className="timeline-tile">
+        <div className="timeline-tile-header">
+          <h2>Timeline{currentTrack ? ` - ${currentTrack.name}` : ''}</h2>
+          {currentTrack ? (
             <span className="timeline-meta">
               {currentTrack.notes.length} notes • {currentTrack.instrumentType}
             </span>
-          </div>
+          ) : (
+            <span className="timeline-meta">Add a track to start composing</span>
+          )}
+        </div>
+        {currentTrack ? (
           <Timeline
             track={currentTrack}
+            onAddNote={(note) => addNote(currentTrack.id, note)}
             onUpdateNote={updateNote}
             onDeleteNote={deleteNote}
             selectedNoteId={selectedNoteId}
             onSelectNote={setSelectedNoteId}
           />
-        </div>
-      )}
+        ) : (
+          <div className="timeline-empty-state">
+            <div className="piano-roll">
+              <div className="piano-roll-grid">
+                {/* Show empty timeline grid */}
+                {Array.from({ length: 128 }, (_, i) => (
+                  <div
+                    key={i}
+                    className={`bar-line ${i % 4 === 0 ? 'measure-start' : ''}`}
+                    style={{ left: `${i * 60}px` }}
+                  >
+                    <span className="bar-label">{i + 1}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
 
       <main className={`main-content ${currentTrack ? 'with-timeline' : ''}`}>
         <div className="left-panel">

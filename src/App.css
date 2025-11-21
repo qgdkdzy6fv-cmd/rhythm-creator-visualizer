@@ -712,6 +712,15 @@ body {
   min-width: 7680px; /* 128 bars × 60px per bar */
 }
 
+.timeline-empty-state {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.timeline-empty-state .piano-roll {
+  cursor: not-allowed;
+}
+
 .bar-line {
   position: absolute;
   top: 0;

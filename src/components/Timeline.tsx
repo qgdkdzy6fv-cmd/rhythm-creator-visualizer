@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
-import type { Track, Note, NoteDuration } from '../types';
+import type { Track, Note, NoteDuration, Pitch } from '../types';
 
 interface TimelineProps {
   track: Track;
+  onAddNote: (note: Omit<Note, 'id' | 'trackId'>) => void;
   onUpdateNote: (noteId: string, updates: Partial<Note>) => void;
   onDeleteNote: (noteId: string) => void;
   selectedNoteId: string | null;
@@ -21,7 +22,7 @@ interface ContextMenuState {
   y: number;
 }
 
-export function Timeline({ track, onUpdateNote, onDeleteNote, selectedNoteId, onSelectNote }: TimelineProps) {
+export function Timeline({ track, onAddNote, onUpdateNote, onDeleteNote, selectedNoteId, onSelectNote }: TimelineProps) {
   const [dragState, setDragState] = useState<DragState | null>(null);
   const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
@@ -123,10 +124,83 @@ export function Timeline({ track, onUpdateNote, onDeleteNote, selectedNoteId, on
   };
 
   /**
-   * Deselect note when clicking outside
+   * LEFT-CLICK: Add new note at clicked position
+   * RIGHT-CLICK: Delete note at clicked position
+   *
+   * This functionality is only active when a track exists.
+   * Notes are added with default values (C4, quarter note, 80% velocity).
    */
-  const handleTimelineClick = () => {
+  const handleTimelineClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Ignore if clicking on a note (let note handlers deal with it)
+    if ((e.target as HTMLElement).closest('.note-block')) {
+      return;
+    }
+
+    // Get click position relative to timeline
+    const rect = timelineRef.current?.getBoundingClientRect();
+    if (!rect) return;
+
+    const clickX = e.clientX - rect.left;
+
+    // Calculate position in beats (snapped to 0.25 beat grid - 16th notes)
+    const rawPosition = clickX / GRID_SIZE;
+    const snappedPosition = Math.max(0, Math.round(rawPosition * 4) / 4); // Snap to 16th notes
+
+    // LEFT CLICK: Add note at position
+    if (e.button === 0) {
+      // Check if there's already a note at this position
+      const existingNote = track.notes.find(note =>
+        Math.abs(note.position - snappedPosition) < 0.01
+      );
+
+      // Only add if no note exists at this position
+      if (!existingNote) {
+        onAddNote({
+          pitch: 'C' as Pitch,
+          octave: 4,
+          duration: 'quarter' as NoteDuration,
+          position: snappedPosition,
+          velocity: 0.8 // Default 80% velocity
+        });
+      }
+    }
+
+    // Deselect any selected note when clicking empty space
     onSelectNote(null);
+  };
+
+  /**
+   * RIGHT-CLICK on timeline: Delete note at clicked position
+   * This replaces the context menu functionality for empty timeline clicks
+   */
+  const handleTimelineContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Ignore if clicking on a note (let note handlers deal with it)
+    if ((e.target as HTMLElement).closest('.note-block')) {
+      return;
+    }
+
+    e.preventDefault();
+
+    // Get click position relative to timeline
+    const rect = timelineRef.current?.getBoundingClientRect();
+    if (!rect) return;
+
+    const clickX = e.clientX - rect.left;
+
+    // Calculate position in beats (snapped to 0.25 beat grid)
+    const rawPosition = clickX / GRID_SIZE;
+    const snappedPosition = Math.max(0, Math.round(rawPosition * 4) / 4);
+
+    // Find note at this position (within snap tolerance)
+    const noteAtPosition = track.notes.find(note =>
+      Math.abs(note.position - snappedPosition) < 0.01
+    );
+
+    // Delete the note if found
+    if (noteAtPosition) {
+      onDeleteNote(noteAtPosition.id);
+      onSelectNote(null); // Deselect if it was selected
+    }
   };
 
   // Close context menu when clicking outside
@@ -153,7 +227,12 @@ export function Timeline({ track, onUpdateNote, onDeleteNote, selectedNoteId, on
   return (
     <div className="timeline-container">
       <div className="timeline-view">
-        <div className="piano-roll" ref={timelineRef} onClick={handleTimelineClick}>
+        <div
+          className="piano-roll"
+          ref={timelineRef}
+          onClick={handleTimelineClick}
+          onContextMenu={handleTimelineContextMenu}
+        >
           <div className="piano-roll-grid">
             {/* Bar lines with labels (1-based counting) - Extended to 128 bars */}
             {Array.from({ length: 128 }, (_, i) => (
