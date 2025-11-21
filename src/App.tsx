@@ -6,7 +6,7 @@ import { audioEngine } from './lib/audioEngine';
 import { WaveformVisualizer } from './components/visualizers/WaveformVisualizer';
 import { BarsVisualizer } from './components/visualizers/BarsVisualizer';
 import { CircularVisualizer } from './components/visualizers/CircularVisualizer';
-import { Timeline } from './components/Timeline';
+import { MultiTrackTimeline } from './components/MultiTrackTimeline';
 import { TrackHeader } from './components/TrackHeader';
 import { COLOR_PALETTE, type Pitch, type NoteDuration, type InstrumentType, type TimeSignature, type VisualizerType } from './types';
 import './App.css';
@@ -18,7 +18,7 @@ const NOTE_DURATIONS: NoteDuration[] = ['whole', 'half', 'quarter', 'eighth', 's
 const OCTAVES = [1, 2, 3, 4, 5, 6, 7, 8];
 
 function AppContent() {
-  const { project, createProject, currentTrack, setCurrentTrack, addTrack, updateTrack, deleteTrack, addNote, updateNote, deleteNote, updateProject, updateVisualizerSettings } = useProject();
+  const { project, createProject, currentTrack, setCurrentTrack, addTrack, updateTrack, deleteTrack, reorderTracks, addNote, updateNote, deleteNote, updateProject, updateVisualizerSettings } = useProject();
   const { theme, toggleTheme } = useTheme();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -152,45 +152,24 @@ function AppContent() {
         </div>
       </header>
 
-      {/* Timeline Tile - Always Visible from Startup */}
+      {/* Multi-Track Timeline - Always Visible from Startup */}
       <div className="timeline-tile">
         <div className="timeline-tile-header">
-          <h2>Timeline{currentTrack ? ` - ${currentTrack.name}` : ''}</h2>
-          {currentTrack ? (
-            <span className="timeline-meta">
-              {currentTrack.notes.length} notes • {currentTrack.instrumentType}
-            </span>
-          ) : (
-            <span className="timeline-meta">Add a track to start composing</span>
-          )}
+          <h2>Multi-Track Timeline</h2>
+          <span className="timeline-meta">
+            {project?.tracks.length || 0} tracks • {project?.tracks.reduce((sum, t) => sum + t.notes.length, 0) || 0} notes total
+          </span>
         </div>
-        {currentTrack ? (
-          <Timeline
-            track={currentTrack}
-            onAddNote={(note) => addNote(currentTrack.id, note)}
-            onUpdateNote={updateNote}
-            onDeleteNote={deleteNote}
-            selectedNoteId={selectedNoteId}
-            onSelectNote={setSelectedNoteId}
-          />
-        ) : (
-          <div className="timeline-empty-state">
-            <div className="piano-roll">
-              <div className="piano-roll-grid">
-                {/* Show empty timeline grid */}
-                {Array.from({ length: 128 }, (_, i) => (
-                  <div
-                    key={i}
-                    className={`bar-line ${i % 4 === 0 ? 'measure-start' : ''}`}
-                    style={{ left: `${i * 60}px` }}
-                  >
-                    <span className="bar-label">{i + 1}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
+        <MultiTrackTimeline
+          tracks={project?.tracks || []}
+          onAddNote={addNote}
+          onUpdateNote={updateNote}
+          onDeleteNote={deleteNote}
+          onUpdateTrack={updateTrack}
+          onReorderTracks={reorderTracks}
+          selectedNoteId={selectedNoteId}
+          onSelectNote={setSelectedNoteId}
+        />
       </div>
 
       <main className={`main-content ${currentTrack ? 'with-timeline' : ''}`}>

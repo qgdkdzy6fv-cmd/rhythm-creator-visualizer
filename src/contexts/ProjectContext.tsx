@@ -11,6 +11,7 @@ interface ProjectContextType {
   addTrack: (name: string, instrumentType: InstrumentType) => void;
   updateTrack: (trackId: string, updates: Partial<Track>) => void;
   deleteTrack: (trackId: string) => void;
+  reorderTracks: (tracks: Track[]) => void;
   addNote: (trackId: string, note: Omit<Note, 'id' | 'trackId'>) => void;
   updateNote: (noteId: string, updates: Partial<Note>) => void;
   deleteNote: (noteId: string) => void;
@@ -109,6 +110,22 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const reorderTracks = (tracks: Track[]) => {
+    if (!project) return;
+
+    setProject({
+      ...project,
+      tracks
+    });
+
+    if (currentTrack) {
+      const updatedCurrentTrack = tracks.find(t => t.id === currentTrack.id);
+      if (updatedCurrentTrack) {
+        setCurrentTrack(updatedCurrentTrack);
+      }
+    }
+  };
+
   const addNote = (trackId: string, note: Omit<Note, 'id' | 'trackId'>) => {
     if (!project) return;
 
@@ -203,6 +220,7 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
         addTrack,
         updateTrack,
         deleteTrack,
+        reorderTracks,
         addNote,
         updateNote,
         deleteNote,

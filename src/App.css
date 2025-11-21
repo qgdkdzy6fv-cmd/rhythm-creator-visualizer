@@ -1254,3 +1254,385 @@ body {
     height: auto;
   }
 }
+
+/* ========================================
+   MULTI-TRACK TIMELINE STYLES
+   ======================================== */
+
+.multi-track-timeline {
+  width: 100%;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.multi-track-timeline.empty {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.empty-timeline-message h3 {
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.empty-timeline-message p {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+/* Timeline Ruler */
+.timeline-ruler {
+  display: flex;
+  height: 40px;
+  background: var(--bg-primary);
+  border-bottom: 2px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.ruler-offset {
+  width: 240px;
+  min-width: 240px;
+  background: var(--bg-secondary);
+  border-right: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ruler-offset::after {
+  content: 'Bars';
+}
+
+.ruler-marks {
+  position: relative;
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-primary) var(--bg-secondary);
+}
+
+.ruler-marks::-webkit-scrollbar {
+  height: 6px;
+}
+
+.ruler-marks::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+.ruler-marks::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 3px;
+}
+
+.ruler-mark {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 60px;
+  border-left: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  padding-left: 4px;
+}
+
+.ruler-mark.major {
+  border-left: 2px solid var(--accent-primary);
+}
+
+.ruler-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  user-select: none;
+}
+
+/* Tracks Container */
+.tracks-container {
+  background: var(--bg-secondary);
+  max-height: 500px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-primary) var(--bg-secondary);
+}
+
+.tracks-container::-webkit-scrollbar {
+  width: 10px;
+}
+
+.tracks-container::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+.tracks-container::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 5px;
+  border: 2px solid var(--bg-secondary);
+}
+
+/* Track Row Wrapper */
+.track-row-wrapper {
+  position: relative;
+  border-bottom: 1px solid var(--border-color);
+  transition: background 0.2s ease;
+}
+
+.track-row-wrapper:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.track-row-wrapper.drag-over {
+  border-top: 3px solid var(--accent-primary);
+  background: rgba(78, 205, 196, 0.1);
+}
+
+.drag-handle {
+  position: absolute;
+  left: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  opacity: 0.4;
+  transition: opacity 0.2s ease;
+  user-select: none;
+  z-index: 5;
+}
+
+.track-row-wrapper:hover .drag-handle {
+  opacity: 1;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+/* Track Row */
+.track-row {
+  display: flex;
+  height: 70px;
+  background: transparent;
+  transition: background 0.2s ease;
+}
+
+.track-row.selected {
+  background: rgba(78, 205, 196, 0.05);
+  border-left: 3px solid var(--accent-primary);
+}
+
+/* Track Controls - Left Side */
+.track-controls {
+  width: 240px;
+  min-width: 240px;
+  padding: 8px 12px 8px 32px;
+  background: var(--bg-primary);
+  border-right: 2px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: center;
+}
+
+.track-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 4px;
+}
+
+.track-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
+.track-meta {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.track-buttons {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.control-btn {
+  width: 32px;
+  height: 24px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.control-btn:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--accent-primary);
+}
+
+.control-btn.active {
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+  border-color: var(--accent-primary);
+}
+
+.volume-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.volume-control label {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  min-width: 24px;
+}
+
+.volume-control input[type="range"] {
+  flex: 1;
+  height: 4px;
+  background: var(--bg-tertiary);
+  border-radius: 2px;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.volume-control input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  background: var(--accent-primary);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.volume-control input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.volume-control input[type="range"]::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  background: var(--accent-primary);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.volume-control input[type="range"]::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}
+
+.volume-value {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  min-width: 28px;
+  text-align: right;
+}
+
+/* Track Timeline - Right Side */
+.track-timeline {
+  flex: 1;
+  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  cursor: crosshair;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 59px,
+    var(--border-color) 59px,
+    var(--border-color) 60px
+  );
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-primary) transparent;
+}
+
+.track-timeline::-webkit-scrollbar {
+  height: 6px;
+}
+
+.track-timeline::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.track-timeline::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 3px;
+}
+
+/* Sync scrolling between ruler and tracks */
+.ruler-marks {
+  min-width: 7680px;
+}
+
+.track-timeline {
+  min-width: 7680px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .track-controls {
+    width: 180px;
+    min-width: 180px;
+    padding: 6px 8px 6px 24px;
+  }
+
+  .ruler-offset {
+    width: 180px;
+    min-width: 180px;
+  }
+
+  .track-name {
+    font-size: 0.8rem;
+    max-width: 140px;
+  }
+
+  .track-buttons {
+    gap: 4px;
+  }
+
+  .control-btn {
+    width: 28px;
+    height: 22px;
+    font-size: 0.7rem;
+  }
+
+  .drag-handle {
+    left: 2px;
+    width: 16px;
+  }
+}
