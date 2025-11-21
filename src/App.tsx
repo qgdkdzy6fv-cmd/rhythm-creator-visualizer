@@ -250,19 +250,19 @@ function AppContent() {
             </div>
 
             <div className="visualizer-display">
-              {project.visualizerSettings.map(vs => (
-                <div key={vs.id}>
-                  {vs.visualizerType === 'waveform' && (
-                    <WaveformVisualizer color={vs.color} isActive={vs.isActive} />
+              {activeVisualizer && (
+                <>
+                  {activeVisualizer.visualizerType === 'waveform' && (
+                    <WaveformVisualizer color={activeVisualizer.color} isActive={true} />
                   )}
-                  {vs.visualizerType === 'bars' && (
-                    <BarsVisualizer color={vs.color} isActive={vs.isActive} />
+                  {activeVisualizer.visualizerType === 'bars' && (
+                    <BarsVisualizer color={activeVisualizer.color} isActive={true} />
                   )}
-                  {vs.visualizerType === 'circular' && (
-                    <CircularVisualizer color={vs.color} isActive={vs.isActive} />
+                  {activeVisualizer.visualizerType === 'circular' && (
+                    <CircularVisualizer color={activeVisualizer.color} isActive={true} />
                   )}
-                </div>
-              ))}
+                </>
+              )}
             </div>
           </div>
         </div>

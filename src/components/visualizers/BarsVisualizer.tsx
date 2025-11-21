@@ -17,12 +17,13 @@ export function BarsVisualizer({ color, isActive }: BarsVisualizerProps) {
 
     const barCount = 64;
     const barWidth = canvas.width / barCount;
+    let animationId: number;
 
     const draw = () => {
       const width = canvas.width;
       const height = canvas.height;
 
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+      ctx.fillStyle = '#000000';
       ctx.fillRect(0, 0, width, height);
 
       ctx.fillStyle = color;
@@ -37,10 +38,16 @@ export function BarsVisualizer({ color, isActive }: BarsVisualizerProps) {
         ctx.fillRect(x, y, barWidth - 2, barHeight);
       }
 
-      requestAnimationFrame(draw);
+      animationId = requestAnimationFrame(draw);
     };
 
     draw();
+
+    return () => {
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+    };
   }, [color, isActive]);
 
   if (!isActive) return null;

@@ -18,12 +18,13 @@ export function CircularVisualizer({ color, isActive }: CircularVisualizerProps)
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
     const maxRadius = Math.min(centerX, centerY) * 0.8;
+    let animationId: number;
 
     const draw = () => {
       const width = canvas.width;
       const height = canvas.height;
 
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+      ctx.fillStyle = '#000000';
       ctx.fillRect(0, 0, width, height);
 
       ctx.strokeStyle = color;
@@ -52,10 +53,16 @@ export function CircularVisualizer({ color, isActive }: CircularVisualizerProps)
       ctx.closePath();
       ctx.stroke();
 
-      requestAnimationFrame(draw);
+      animationId = requestAnimationFrame(draw);
     };
 
     draw();
+
+    return () => {
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+    };
   }, [color, isActive]);
 
   if (!isActive) return null;
