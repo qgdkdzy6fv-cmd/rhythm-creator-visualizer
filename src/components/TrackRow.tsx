@@ -159,6 +159,11 @@ export function TrackRow({
     onUpdateTrack(track.id, { solo: !track.solo });
   };
 
+  const handleToggleLoop = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onUpdateTrack(track.id, { loop: !track.loop });
+  };
+
   return (
     <div className={`track-row ${isSelected ? 'selected' : ''}`} style={{ backgroundColor: `${track.color}08` }}>
       {/* Drag Handle - Left Edge */}
@@ -201,6 +206,13 @@ export function TrackRow({
               title={track.solo ? 'Unsolo' : 'Solo'}
             >
               S
+            </button>
+            <button
+              className={`control-btn ${track.loop ? 'active' : ''}`}
+              onClick={handleToggleLoop}
+              title={track.loop ? 'Disable loop' : 'Enable loop'}
+            >
+              L
             </button>
           </div>
         </div>

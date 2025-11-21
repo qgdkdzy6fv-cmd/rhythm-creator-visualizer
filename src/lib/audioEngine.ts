@@ -119,14 +119,27 @@ export class AudioEngine {
     const synth = this.synths.get(track.id);
     if (!synth) return;
 
-    track.notes.forEach(note => {
-      const noteName = `${note.pitch}${note.octave}`;
-      const durationSeconds = this.getDurationInSeconds(note.duration, Tone.getTransport().bpm.value);
+    if (track.loop && track.notes.length > 0) {
+      const maxPosition = Math.max(...track.notes.map(n => n.position)) + 4;
 
-      Tone.getTransport().schedule((time) => {
-        synth.triggerAttackRelease(noteName, durationSeconds, time, note.velocity);
-      }, `0:${note.position}:0`);
-    });
+      track.notes.forEach(note => {
+        const noteName = `${note.pitch}${note.octave}`;
+        const durationSeconds = this.getDurationInSeconds(note.duration, Tone.getTransport().bpm.value);
+
+        Tone.getTransport().scheduleRepeat((time) => {
+          synth.triggerAttackRelease(noteName, durationSeconds, time, note.velocity);
+        }, `${maxPosition}:0:0`, `0:${note.position}:0`);
+      });
+    } else {
+      track.notes.forEach(note => {
+        const noteName = `${note.pitch}${note.octave}`;
+        const durationSeconds = this.getDurationInSeconds(note.duration, Tone.getTransport().bpm.value);
+
+        Tone.getTransport().schedule((time) => {
+          synth.triggerAttackRelease(noteName, durationSeconds, time, note.velocity);
+        }, `0:${note.position}:0`);
+      });
+    }
   }
 
   play(tracks: Track[], tempo: number) {

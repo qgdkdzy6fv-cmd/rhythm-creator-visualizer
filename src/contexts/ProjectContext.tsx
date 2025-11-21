@@ -65,6 +65,7 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
       volume: 0.7,
       muted: false,
       solo: false,
+      loop: false,
       orderIndex: project.tracks.length,
       notes: [],
       isExpanded: true,

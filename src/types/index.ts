@@ -24,6 +24,7 @@ export interface Track {
   volume: number;
   muted: boolean;
   solo: boolean;
+  loop: boolean;
   orderIndex: number;
   notes: Note[];
   isExpanded: boolean;
