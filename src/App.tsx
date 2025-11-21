@@ -4,11 +4,9 @@ import { ProjectProvider, useProject } from './contexts/ProjectContext';
 import { useTheme } from './contexts/ThemeContext';
 import { audioEngine } from './lib/audioEngine';
 import { WaveformVisualizer } from './components/visualizers/WaveformVisualizer';
-import { BarsVisualizer } from './components/visualizers/BarsVisualizer';
-import { CircularVisualizer } from './components/visualizers/CircularVisualizer';
 import { MultiTrackTimeline } from './components/MultiTrackTimeline';
 import { TrackHeader } from './components/TrackHeader';
-import { COLOR_PALETTE, type Pitch, type NoteDuration, type InstrumentType, type TimeSignature, type VisualizerType } from './types';
+import { COLOR_PALETTE, type Pitch, type NoteDuration, type InstrumentType, type TimeSignature } from './types';
 import './App.css';
 
 const TIME_SIGNATURES: TimeSignature[] = ['4/4', '3/4', '6/8', '5/4', '7/8', '2/4'];
@@ -94,15 +92,6 @@ function AppContent() {
       ...prev,
       position: prev.position + 1
     }));
-  };
-
-  const handleVisualizerTypeChange = (type: VisualizerType) => {
-    if (!project) return;
-    const updatedSettings = project.visualizerSettings.map(vs => ({
-      ...vs,
-      isActive: vs.visualizerType === type
-    }));
-    updateProject({ visualizerSettings: updatedSettings });
   };
 
   const handleColorChange = (color: string) => {
@@ -207,27 +196,10 @@ function AppContent() {
           <div className="visualizer-panel">
             <div className="visualizer-controls">
               <div className="visualizer-type-selector">
-                <label>Visualizer Type</label>
-                <div className="button-group">
-                  <button
-                    className={activeVisualizer?.visualizerType === 'waveform' ? 'active' : ''}
-                    onClick={() => handleVisualizerTypeChange('waveform')}
-                  >
-                    Waveform
-                  </button>
-                  <button
-                    className={activeVisualizer?.visualizerType === 'bars' ? 'active' : ''}
-                    onClick={() => handleVisualizerTypeChange('bars')}
-                  >
-                    Bars
-                  </button>
-                  <button
-                    className={activeVisualizer?.visualizerType === 'circular' ? 'active' : ''}
-                    onClick={() => handleVisualizerTypeChange('circular')}
-                  >
-                    Circular
-                  </button>
-                </div>
+                <label>Waveform Visualizer</label>
+                <p style={{ fontSize: '0.85rem', opacity: 0.7, margin: '0.5rem 0' }}>
+                  More types coming soon
+                </p>
               </div>
 
               {activeVisualizer && (
@@ -250,17 +222,7 @@ function AppContent() {
 
             <div className="visualizer-display">
               {activeVisualizer && (
-                <>
-                  {activeVisualizer.visualizerType === 'waveform' && (
-                    <WaveformVisualizer color={activeVisualizer.color} isActive={true} />
-                  )}
-                  {activeVisualizer.visualizerType === 'bars' && (
-                    <BarsVisualizer color={activeVisualizer.color} isActive={true} />
-                  )}
-                  {activeVisualizer.visualizerType === 'circular' && (
-                    <CircularVisualizer color={activeVisualizer.color} isActive={true} />
-                  )}
-                </>
+                <WaveformVisualizer color={activeVisualizer.color} isActive={true} />
               )}
             </div>
           </div>
