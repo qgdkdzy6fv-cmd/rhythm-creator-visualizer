@@ -260,7 +260,7 @@ function AppContent() {
                       onDelete={() => deleteTrack(track.id)}
                     />
 
-                    {track.isExpanded && currentTrack?.id === track.id && (
+                    {track.isExpanded && (
                       <div className="track-controls">
                         <div className="control-group">
                           <label>Instrument</label>
