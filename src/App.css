@@ -1646,12 +1646,16 @@ body {
 /* Inline Ruler - Parallel Timeline for Each Track */
 .inline-ruler {
   position: absolute;
-  top: 0;
+  top: 8px;
   left: 0;
   right: 0;
   height: 20px;
   pointer-events: none;
   z-index: 0;
+}
+
+.track-row-wrapper:first-child .inline-ruler {
+  top: 0;
 }
 
 .inline-ruler-mark {
