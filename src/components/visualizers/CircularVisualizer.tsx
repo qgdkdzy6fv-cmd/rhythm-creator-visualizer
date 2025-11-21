@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { audioEngine } from '../../lib/audioEngine';
 
 interface CircularVisualizerProps {
   color: string;
@@ -8,7 +7,6 @@ interface CircularVisualizerProps {
 
 export function CircularVisualizer({ color, isActive }: CircularVisualizerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     if (!isActive || !canvasRef.current) return;
@@ -17,80 +15,57 @@ export function CircularVisualizer({ color, isActive }: CircularVisualizerProps)
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const maxRadius = Math.min(centerX, centerY) * 0.8;
+
     const draw = () => {
-      const data = audioEngine.getAnalyserData();
       const width = canvas.width;
       const height = canvas.height;
-      const centerX = width / 2;
-      const centerY = height / 2;
-      const radius = Math.min(width, height) / 4;
 
       ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
       ctx.fillRect(0, 0, width, height);
 
-      const barCount = 128;
-      const step = Math.floor(data.length / barCount);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 3;
 
-      for (let i = 0; i < barCount; i++) {
-        const value = data[i * step] / 255;
-        const angle = (i / barCount) * Math.PI * 2;
-        const barHeight = value * radius;
+      const time = Date.now() * 0.001;
+      const points = 128;
 
-        const x1 = centerX + Math.cos(angle) * radius;
-        const y1 = centerY + Math.sin(angle) * radius;
-        const x2 = centerX + Math.cos(angle) * (radius + barHeight);
-        const y2 = centerY + Math.sin(angle) * (radius + barHeight);
+      ctx.beginPath();
 
-        const gradient = ctx.createLinearGradient(x1, y1, x2, y2);
-        gradient.addColorStop(0, color + '40');
-        gradient.addColorStop(1, color);
+      for (let i = 0; i <= points; i++) {
+        const angle = (i / points) * Math.PI * 2;
+        const radiusVariation = Math.sin(time * 2 + angle * 8) * 0.3 + 1;
+        const radius = maxRadius * radiusVariation * 0.7;
 
-        ctx.strokeStyle = gradient;
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.stroke();
+        const x = centerX + Math.cos(angle) * radius;
+        const y = centerY + Math.sin(angle) * radius;
+
+        if (i === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
       }
 
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+      ctx.closePath();
       ctx.stroke();
 
-      animationRef.current = requestAnimationFrame(draw);
+      requestAnimationFrame(draw);
     };
 
     draw();
-
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    };
   }, [color, isActive]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (canvasRef.current) {
-        canvasRef.current.width = canvasRef.current.offsetWidth;
-        canvasRef.current.height = canvasRef.current.offsetHeight;
-      }
-    };
-
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   if (!isActive) return null;
 
   return (
     <canvas
       ref={canvasRef}
-      className="visualizer-canvas"
-      style={{ width: '100%', height: '200px' }}
+      width={800}
+      height={400}
+      style={{ width: '100%', height: '100%' }}
     />
   );
 }
