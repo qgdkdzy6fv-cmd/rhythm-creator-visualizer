@@ -143,7 +143,7 @@ function AppContent() {
       {/* Multi-Track Timeline - Always Visible from Startup */}
       <div className="timeline-tile">
         <div className="timeline-tile-header">
-          <h2>Multi-Track Timeline</h2>
+          <h2>Timeline</h2>
           <span className="timeline-meta">
             {project?.tracks.length || 0} tracks • {project?.tracks.reduce((sum, t) => sum + t.notes.length, 0) || 0} notes total
           </span>
