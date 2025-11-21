@@ -261,7 +261,7 @@ function AppContent() {
                     />
 
                     {track.isExpanded && (
-                      <div className="track-controls">
+                      <div className="track-details">
                         <div className="control-group">
                           <label>Instrument</label>
                           <select
