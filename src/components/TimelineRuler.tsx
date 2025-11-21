@@ -15,7 +15,7 @@ export function TimelineRuler({ totalBars = 128 }: TimelineRulerProps) {
             className={`ruler-mark ${i % 4 === 0 ? 'major' : 'minor'}`}
             style={{ left: `${i * GRID_SIZE}px` }}
           >
-            {i % 4 === 0 && <span className="ruler-label">{i + 1}</span>}
+            <span className="ruler-label">{i + 1}</span>
           </div>
         ))}
       </div>

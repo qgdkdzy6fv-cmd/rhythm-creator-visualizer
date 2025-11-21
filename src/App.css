@@ -1283,15 +1283,9 @@ body {
   color: var(--text-secondary);
 }
 
-/* Timeline Ruler */
+/* Timeline Ruler - Hidden (using inline rulers now) */
 .timeline-ruler {
-  display: flex;
-  height: 40px;
-  background: var(--bg-primary);
-  border-bottom: 2px solid var(--border-color);
-  position: sticky;
-  top: 0;
-  z-index: 10;
+  display: none;
 }
 
 .ruler-offset {
@@ -1638,6 +1632,40 @@ body {
 
 .track-timeline {
   min-width: 7680px;
+}
+
+/* Inline Ruler - Parallel Timeline for Each Track */
+.inline-ruler {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.inline-ruler-mark {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 60px;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  padding-left: 4px;
+}
+
+.inline-ruler-mark.major {
+  border-left: 2px solid var(--accent-primary);
+}
+
+.inline-ruler-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  user-select: none;
+  opacity: 0.8;
 }
 
 /* Responsive adjustments */

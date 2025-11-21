@@ -149,10 +149,6 @@ export function TrackRow({
     onUpdateTrack(track.id, { solo: !track.solo });
   };
 
-  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onUpdateTrack(track.id, { volume: parseFloat(e.target.value) });
-  };
-
   return (
     <div className={`track-row ${isSelected ? 'selected' : ''}`} style={{ backgroundColor: `${track.color}08` }}>
       {/* Track Controls - Left Side */}
@@ -178,20 +174,6 @@ export function TrackRow({
             S
           </button>
         </div>
-
-        <div className="volume-control">
-          <label>Vol</label>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value={track.volume}
-            onChange={handleVolumeChange}
-            title={`Volume: ${Math.round(track.volume * 100)}%`}
-          />
-          <span className="volume-value">{Math.round(track.volume * 100)}</span>
-        </div>
       </div>
 
       {/* Track Timeline - Right Side */}
@@ -201,6 +183,19 @@ export function TrackRow({
         onClick={handleTrackClick}
         onContextMenu={handleTrackContextMenu}
       >
+        {/* Inline Timeline Ruler */}
+        <div className="inline-ruler">
+          {Array.from({ length: 128 }, (_, i) => (
+            <div
+              key={i}
+              className={`inline-ruler-mark ${i % 4 === 0 ? 'major' : 'minor'}`}
+              style={{ left: `${i * GRID_SIZE}px` }}
+            >
+              <span className="inline-ruler-label">{i + 1}</span>
+            </div>
+          ))}
+        </div>
+
         {/* Notes */}
         {track.notes.map(note => (
           <div
