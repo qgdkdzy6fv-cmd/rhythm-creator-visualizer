@@ -98,12 +98,11 @@ function AppContent() {
 
   const handleVisualizerTypeChange = (type: VisualizerType) => {
     if (!project) return;
-    project.visualizerSettings.forEach(vs => {
-      updateVisualizerSettings({
-        id: vs.id,
-        isActive: vs.visualizerType === type
-      });
-    });
+    const updatedSettings = project.visualizerSettings.map(vs => ({
+      ...vs,
+      isActive: vs.visualizerType === type
+    }));
+    updateProject({ visualizerSettings: updatedSettings });
   };
 
   const handleColorChange = (color: string) => {
