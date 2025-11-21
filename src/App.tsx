@@ -421,18 +421,6 @@ function AppContent() {
                         onChange={(e) => setNewNote({ ...newNote, position: parseFloat(e.target.value) })}
                       />
                     </div>
-
-                    <div className="control-group">
-                      <label>Velocity: {Math.round(newNote.velocity * 100)}%</label>
-                      <input
-                        type="range"
-                        min="0"
-                        max="1"
-                        step="0.01"
-                        value={newNote.velocity}
-                        onChange={(e) => setNewNote({ ...newNote, velocity: parseFloat(e.target.value) })}
-                      />
-                    </div>
                   </div>
 
                   <button onClick={handleAddNote} className="add-note-btn">
