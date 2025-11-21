@@ -773,7 +773,7 @@ body {
   top: 50%;
   transform: translateY(-50%);
   height: 40px;
-  background: var(--accent-primary);
+  background: var(--note-color, var(--accent-primary));
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s;
@@ -782,7 +782,6 @@ body {
   padding: 0 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   border: 2px solid transparent;
-  position: relative;
 }
 
 .note-block::before {
@@ -792,7 +791,7 @@ body {
   left: -2px;
   right: -2px;
   bottom: -2px;
-  background: var(--accent-primary);
+  background: var(--note-color, var(--accent-primary));
   border-radius: 4px;
   z-index: -1;
   opacity: var(--note-velocity-opacity, 1);
@@ -980,6 +979,15 @@ body {
   display: flex;
   align-items: flex-start;
   flex: 1;
+  gap: 8px;
+}
+
+.track-color-indicator {
+  width: 4px;
+  min-height: 100%;
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  align-self: stretch;
 }
 
 .track-name {

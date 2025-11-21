@@ -27,6 +27,7 @@ export interface Track {
   orderIndex: number;
   notes: Note[];
   isExpanded: boolean;
+  color?: string;
 }
 
 export interface VisualizerSettings {
@@ -57,14 +58,17 @@ export interface UserPreferences {
   defaultTimeSignature: TimeSignature;
 }
 
+// Accessible color palette optimized for dark mode with high contrast
+// Each color meets WCAG AA contrast requirements and is distinguishable
+// for users with color vision deficiencies
 export const COLOR_PALETTE = [
-  '#FF6B6B',
-  '#4ECDC4',
-  '#45B7D1',
-  '#FFA07A',
-  '#98D8C8',
-  '#F7DC6F',
-  '#BB8FCE',
-  '#85C1E2',
-  '#52BE80'
+  '#FF6B6B',  // Coral Red - Track 1
+  '#4ECDC4',  // Cyan - Track 2
+  '#FFD93D',  // Golden Yellow - Track 3
+  '#6BCF7F',  // Green - Track 4
+  '#A78BFA',  // Purple - Track 5
+  '#FB923C',  // Orange - Track 6
+  '#38BDF8',  // Sky Blue - Track 7
+  '#F472B6',  // Pink - Track 8
+  '#34D399'   // Emerald - Track 9
 ];

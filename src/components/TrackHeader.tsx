@@ -113,6 +113,15 @@ export function TrackHeader({ track, onUpdateTrack, onDelete }: TrackHeaderProps
   return (
     <div className="track-header">
       <div className="track-header-left">
+        {/* Track Color Indicator */}
+        {track.color && (
+          <div
+            className="track-color-indicator"
+            style={{ backgroundColor: track.color }}
+            title={`Track color: ${track.color}`}
+          />
+        )}
+
         {/* Feature 4: Expand/Collapse Button */}
         <button
           onClick={toggleExpanded}

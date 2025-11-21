@@ -193,7 +193,8 @@ export function Timeline({ track, onUpdateNote, onDeleteNote }: TimelineProps) {
                   style={{
                     left: `${left}px`,
                     width: `${width}px`,
-                    '--note-velocity-opacity': velocityOpacity
+                    '--note-velocity-opacity': velocityOpacity,
+                    '--note-color': track.color || '#4ECDC4'
                   } as React.CSSProperties}
                   onClick={(e) => handleNoteClick(e, note)}
                   onMouseDown={(e) => handleNoteMouseDown(e, note)}

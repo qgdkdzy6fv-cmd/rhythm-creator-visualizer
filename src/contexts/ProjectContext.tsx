@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, type ReactNode } from 'react';
 import type { Project, Track, Note, VisualizerSettings, InstrumentType } from '../types';
+import { COLOR_PALETTE } from '../types';
 
 interface ProjectContextType {
   project: Project | null;
@@ -50,6 +51,10 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
   const addTrack = (name: string, instrumentType: InstrumentType) => {
     if (!project) return;
 
+    // Assign color from palette based on track index (cycle through colors)
+    const colorIndex = project.tracks.length % COLOR_PALETTE.length;
+    const trackColor = COLOR_PALETTE[colorIndex];
+
     const newTrack: Track = {
       id: crypto.randomUUID(),
       projectId: project.id,
@@ -61,7 +66,8 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
       solo: false,
       orderIndex: project.tracks.length,
       notes: [],
-      isExpanded: true
+      isExpanded: true,
+      color: trackColor
     };
 
     setProject({
