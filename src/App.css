@@ -1471,11 +1471,20 @@ body {
   box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
 }
 
+.track-info-with-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 8px;
+}
+
 .track-info {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  margin-bottom: 4px;
+  flex: 1;
+  min-width: 0;
 }
 
 .track-name {
@@ -1498,7 +1507,7 @@ body {
 .track-buttons {
   display: flex;
   gap: 6px;
-  margin-bottom: 4px;
+  flex-shrink: 0;
 }
 
 .control-btn {

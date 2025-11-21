@@ -153,26 +153,28 @@ export function TrackRow({
     <div className={`track-row ${isSelected ? 'selected' : ''}`} style={{ backgroundColor: `${track.color}08` }}>
       {/* Track Controls - Left Side */}
       <div className="track-controls">
-        <div className="track-info">
-          <div className="track-name" title={track.name}>{track.name}</div>
-          <div className="track-meta">{track.instrumentType} • {track.timeSignature}</div>
-        </div>
+        <div className="track-info-with-buttons">
+          <div className="track-info">
+            <div className="track-name" title={track.name}>{track.name}</div>
+            <div className="track-meta">{track.instrumentType} • {track.timeSignature}</div>
+          </div>
 
-        <div className="track-buttons">
-          <button
-            className={`control-btn ${track.muted ? 'active' : ''}`}
-            onClick={handleToggleMute}
-            title={track.muted ? 'Unmute' : 'Mute'}
-          >
-            M
-          </button>
-          <button
-            className={`control-btn ${track.solo ? 'active' : ''}`}
-            onClick={handleToggleSolo}
-            title={track.solo ? 'Unsolo' : 'Solo'}
-          >
-            S
-          </button>
+          <div className="track-buttons">
+            <button
+              className={`control-btn ${track.muted ? 'active' : ''}`}
+              onClick={handleToggleMute}
+              title={track.muted ? 'Unmute' : 'Mute'}
+            >
+              M
+            </button>
+            <button
+              className={`control-btn ${track.solo ? 'active' : ''}`}
+              onClick={handleToggleSolo}
+              title={track.solo ? 'Unsolo' : 'Solo'}
+            >
+              S
+            </button>
+          </div>
         </div>
       </div>
 
