@@ -173,13 +173,49 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
+/* Timeline Tile - Top Section */
+.timeline-tile {
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 20px 24px;
+  margin: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.timeline-tile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.timeline-tile-header h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.timeline-meta {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
 .main-content {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 16px;
   padding: 16px;
-  height: calc(100vh - 105px);
+  height: auto;
+  max-height: calc(100vh - 105px);
   overflow: hidden;
+}
+
+.main-content.with-timeline {
+  max-height: calc(100vh - 260px);
 }
 
 .left-panel,
@@ -630,14 +666,8 @@ body {
 .timeline-view {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.timeline-view h3 {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text-secondary);
+  gap: 0;
+  margin-bottom: 0;
 }
 
 .piano-roll {
@@ -1253,9 +1283,24 @@ body {
 }
 
 @media (max-width: 1200px) {
+  .timeline-tile {
+    padding: 16px;
+  }
+
+  .timeline-tile-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
   .main-content {
     grid-template-columns: 1fr;
     overflow-y: auto;
+    max-height: none;
+  }
+
+  .main-content.with-timeline {
+    max-height: none;
   }
 
   .left-panel,

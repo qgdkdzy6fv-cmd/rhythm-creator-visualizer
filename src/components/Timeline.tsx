@@ -166,7 +166,6 @@ export function Timeline({ track, onUpdateNote, onDeleteNote }: TimelineProps) {
   return (
     <div className="timeline-container">
       <div className="timeline-view">
-        <h3>Timeline</h3>
         <div className="piano-roll" ref={timelineRef} onClick={handleTimelineClick}>
           <div className="piano-roll-grid">
             {/* Bar lines with labels (1-based counting) */}

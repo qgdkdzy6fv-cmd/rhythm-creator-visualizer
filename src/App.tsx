@@ -151,7 +151,24 @@ function AppContent() {
         </div>
       </header>
 
-      <main className="main-content">
+      {/* Timeline Tile - Top Section */}
+      {currentTrack && (
+        <div className="timeline-tile">
+          <div className="timeline-tile-header">
+            <h2>Timeline - {currentTrack.name}</h2>
+            <span className="timeline-meta">
+              {currentTrack.notes.length} notes • {currentTrack.instrumentType}
+            </span>
+          </div>
+          <Timeline
+            track={currentTrack}
+            onUpdateNote={updateNote}
+            onDeleteNote={deleteNote}
+          />
+        </div>
+      )}
+
+      <main className={`main-content ${currentTrack ? 'with-timeline' : ''}`}>
         <div className="left-panel">
           <div className="playback-controls">
             <div className="transport-buttons">
@@ -419,12 +436,6 @@ function AppContent() {
                     Add Note
                   </button>
                 </div>
-
-                <Timeline
-                  track={currentTrack}
-                  onUpdateNote={updateNote}
-                  onDeleteNote={deleteNote}
-                />
 
                 <div className="notes-list">
                   <h3>Notes ({currentTrack.notes.length})</h3>
