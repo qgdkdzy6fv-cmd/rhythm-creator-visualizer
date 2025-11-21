@@ -29,6 +29,51 @@ body {
   color: var(--text-primary);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   line-height: 1.5;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-primary) var(--bg-tertiary);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-primary) var(--bg-tertiary);
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 5px;
+  border: 2px solid var(--bg-tertiary);
+  transition: background 0.2s, transform 0.2s;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #5fd9d1;
+  transform: scale(1.05);
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background: #6de5dd;
+}
+
+[data-theme="light"] *::-webkit-scrollbar-thumb {
+  background: #4ECDC4;
+}
+
+[data-theme="light"] *::-webkit-scrollbar-thumb:hover {
+  background: #45b8b0;
+}
+
+[data-theme="light"] *::-webkit-scrollbar-thumb:active {
+  background: #3ca39c;
 }
 
 #root {
@@ -141,6 +186,44 @@ body {
   padding: 20px;
   overflow-y: auto;
   border: 1px solid var(--border-color);
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-primary) var(--bg-tertiary);
+}
+
+.left-panel::-webkit-scrollbar,
+.center-panel::-webkit-scrollbar,
+.right-panel::-webkit-scrollbar {
+  width: 10px;
+}
+
+.left-panel::-webkit-scrollbar-track,
+.center-panel::-webkit-scrollbar-track,
+.right-panel::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: 5px;
+  margin: 8px 0;
+}
+
+.left-panel::-webkit-scrollbar-thumb,
+.center-panel::-webkit-scrollbar-thumb,
+.right-panel::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 5px;
+  border: 2px solid var(--bg-tertiary);
+  transition: background 0.2s;
+}
+
+.left-panel::-webkit-scrollbar-thumb:hover,
+.center-panel::-webkit-scrollbar-thumb:hover,
+.right-panel::-webkit-scrollbar-thumb:hover {
+  background: #5fd9d1;
+  cursor: pointer;
+}
+
+.left-panel::-webkit-scrollbar-thumb:active,
+.center-panel::-webkit-scrollbar-thumb:active,
+.right-panel::-webkit-scrollbar-thumb:active {
+  background: #6de5dd;
 }
 
 .playback-controls {
@@ -550,6 +633,34 @@ body {
   padding: 16px;
   overflow-x: auto;
   overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-primary) var(--bg-secondary);
+}
+
+.piano-roll::-webkit-scrollbar {
+  height: 10px;
+}
+
+.piano-roll::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 5px;
+  margin: 0 8px;
+}
+
+.piano-roll::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 5px;
+  border: 2px solid var(--bg-secondary);
+  transition: background 0.2s;
+}
+
+.piano-roll::-webkit-scrollbar-thumb:hover {
+  background: #5fd9d1;
+  cursor: pointer;
+}
+
+.piano-roll::-webkit-scrollbar-thumb:active {
+  background: #6de5dd;
 }
 
 .piano-roll-grid {
