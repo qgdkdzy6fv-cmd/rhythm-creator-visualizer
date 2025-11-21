@@ -21,6 +21,7 @@ export function WaveformVisualizer({ color, isActive }: WaveformVisualizerProps)
     const draw = () => {
       const width = canvas.width;
       const height = canvas.height;
+      const centerY = height / 2;
 
       ctx.fillStyle = '#000000';
       ctx.fillRect(0, 0, width, height);
@@ -34,8 +35,8 @@ export function WaveformVisualizer({ color, isActive }: WaveformVisualizerProps)
       const sliceWidth = width / data.length;
 
       for (let i = 0; i < data.length; i++) {
-        const v = data[i] / 128.0;
-        const y = (v * height) / 2;
+        const v = data[i];
+        const y = centerY + (v * centerY * 0.8);
         const x = i * sliceWidth;
 
         if (i === 0) {

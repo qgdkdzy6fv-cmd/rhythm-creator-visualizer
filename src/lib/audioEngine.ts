@@ -156,12 +156,12 @@ export class AudioEngine {
     return this.isPlaying;
   }
 
-  getAnalyserData(): Uint8Array {
+  getAnalyserData(): Float32Array {
     const data = this.analyser.getValue();
     if (Array.isArray(data)) {
-      return new Uint8Array(data[0]);
+      return data[0] as Float32Array;
     }
-    return new Uint8Array(data);
+    return data as Float32Array;
   }
 
   dispose() {
