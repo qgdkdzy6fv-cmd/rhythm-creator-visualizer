@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Moon, Sun } from 'lucide-react';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { ProjectProvider, useProject } from './contexts/ProjectContext';
 import { useTheme } from './contexts/ThemeContext';
@@ -135,7 +136,7 @@ function AppContent() {
 
         <div className="header-actions">
           <button onClick={toggleTheme} className="theme-toggle" aria-label="Toggle theme">
-            {theme === 'light' ? '🌙' : '☀️'}
+            {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
           </button>
         </div>
       </header>
