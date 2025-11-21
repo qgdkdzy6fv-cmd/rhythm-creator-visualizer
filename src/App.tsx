@@ -22,6 +22,7 @@ function AppContent() {
   const { theme, toggleTheme } = useTheme();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
   const [newNote, setNewNote] = useState({
     pitch: 'C' as Pitch,
     octave: 4,
@@ -164,6 +165,8 @@ function AppContent() {
             track={currentTrack}
             onUpdateNote={updateNote}
             onDeleteNote={deleteNote}
+            selectedNoteId={selectedNoteId}
+            onSelectNote={setSelectedNoteId}
           />
         </div>
       )}
@@ -462,6 +465,72 @@ function AppContent() {
                     </div>
                   )}
                 </div>
+
+                {/* Velocity Control Panel */}
+                {selectedNoteId && (() => {
+                  const selectedNote = currentTrack.notes.find(note => note.id === selectedNoteId);
+                  if (!selectedNote) return null;
+
+                  const handleVelocityChange = (velocity: number) => {
+                    updateNote(selectedNoteId, { velocity });
+                  };
+
+                  return (
+                    <div className="velocity-control-panel">
+                      <div className="velocity-control-header">
+                        <h4>Velocity Control</h4>
+                        <button
+                          className="close-btn"
+                          onClick={() => setSelectedNoteId(null)}
+                          aria-label="Close velocity control"
+                        >
+                          ×
+                        </button>
+                      </div>
+
+                      <div className="velocity-info">
+                        <span className="note-info">
+                          {selectedNote.pitch}{selectedNote.octave} • {selectedNote.duration}
+                        </span>
+                        <span className="velocity-value">
+                          {Math.round(selectedNote.velocity * 127)}
+                        </span>
+                      </div>
+
+                      <div className="velocity-slider-container">
+                        <label htmlFor="velocity-slider">
+                          Velocity (0-127)
+                        </label>
+                        <input
+                          id="velocity-slider"
+                          type="range"
+                          min="0"
+                          max="127"
+                          value={Math.round(selectedNote.velocity * 127)}
+                          onChange={(e) => handleVelocityChange(parseInt(e.target.value) / 127)}
+                          className="velocity-slider"
+                        />
+                        <div className="velocity-markers">
+                          <span>0 (Silent)</span>
+                          <span>64 (Medium)</span>
+                          <span>127 (Full)</span>
+                        </div>
+                      </div>
+
+                      <div className="velocity-presets">
+                        <button onClick={() => handleVelocityChange(0.2)}>pp</button>
+                        <button onClick={() => handleVelocityChange(0.4)}>p</button>
+                        <button onClick={() => handleVelocityChange(0.6)}>mf</button>
+                        <button onClick={() => handleVelocityChange(0.8)}>f</button>
+                        <button onClick={() => handleVelocityChange(1.0)}>ff</button>
+                      </div>
+
+                      <div className="velocity-hint">
+                        Press Escape to deselect
+                      </div>
+                    </div>
+                  );
+                })()}
               </>
             )}
           </div>
