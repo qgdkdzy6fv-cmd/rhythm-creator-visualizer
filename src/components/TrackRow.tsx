@@ -13,6 +13,9 @@ interface TrackRowProps {
   onSelectNote: (noteId: string | null) => void;
   onDragStart: (e: React.DragEvent) => void;
   onDragEnd: () => void;
+  defaultPitch: Pitch;
+  defaultOctave: number;
+  defaultDuration: NoteDuration;
 }
 
 interface DragState {
@@ -41,7 +44,10 @@ export function TrackRow({
   selectedNoteId,
   onSelectNote,
   onDragStart,
-  onDragEnd
+  onDragEnd,
+  defaultPitch,
+  defaultOctave,
+  defaultDuration
 }: TrackRowProps) {
   const [dragState, setDragState] = useState<DragState | null>(null);
   const trackRowRef = useRef<HTMLDivElement>(null);
@@ -65,9 +71,9 @@ export function TrackRow({
 
       if (!existingNote) {
         onAddNote(track.id, {
-          pitch: 'C' as Pitch,
-          octave: 4,
-          duration: 'quarter' as NoteDuration,
+          pitch: defaultPitch,
+          octave: defaultOctave,
+          duration: defaultDuration,
           position: snappedPosition,
           velocity: 0.8
         });

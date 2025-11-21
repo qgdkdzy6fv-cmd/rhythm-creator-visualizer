@@ -157,6 +157,9 @@ function AppContent() {
           onReorderTracks={reorderTracks}
           selectedNoteId={selectedNoteId}
           onSelectNote={setSelectedNoteId}
+          defaultPitch={newNote.pitch}
+          defaultOctave={newNote.octave}
+          defaultDuration={newNote.duration}
         />
       </div>
 

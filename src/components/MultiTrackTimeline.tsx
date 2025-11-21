@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { TimelineRuler } from './TimelineRuler';
 import { TrackRow } from './TrackRow';
-import type { Track, Note } from '../types';
+import type { Track, Note, Pitch, NoteDuration } from '../types';
 
 interface MultiTrackTimelineProps {
   tracks: Track[];
@@ -12,6 +12,9 @@ interface MultiTrackTimelineProps {
   onReorderTracks: (tracks: Track[]) => void;
   selectedNoteId: string | null;
   onSelectNote: (noteId: string | null) => void;
+  defaultPitch: Pitch;
+  defaultOctave: number;
+  defaultDuration: NoteDuration;
 }
 
 export function MultiTrackTimeline({
@@ -22,7 +25,10 @@ export function MultiTrackTimeline({
   onUpdateTrack,
   onReorderTracks,
   selectedNoteId,
-  onSelectNote
+  onSelectNote,
+  defaultPitch,
+  defaultOctave,
+  defaultDuration
 }: MultiTrackTimelineProps) {
   const [selectedTrackId, setSelectedTrackId] = useState<string | null>(null);
   const [draggedTrackId, setDraggedTrackId] = useState<string | null>(null);
@@ -109,6 +115,9 @@ export function MultiTrackTimeline({
               onSelectNote={onSelectNote}
               onDragStart={(e) => handleTrackDragStart(track.id, e)}
               onDragEnd={handleTrackDragEnd}
+              defaultPitch={defaultPitch}
+              defaultOctave={defaultOctave}
+              defaultDuration={defaultDuration}
             />
           </div>
         ))}
