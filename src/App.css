@@ -1394,24 +1394,22 @@ body {
   border: 2px solid var(--bg-secondary);
 }
 
-/* Track Row Wrapper - Layered with Overlap */
+/* Track Row Wrapper - Layered with Overlap on Timeline Only */
 .track-row-wrapper {
   position: relative;
   border-bottom: 1px solid var(--border-color);
   transition: all 0.2s ease;
-  margin-top: -8px;
   z-index: 1;
-}
-
-.track-row-wrapper:first-child {
-  margin-top: 0;
 }
 
 .track-row-wrapper:hover {
   background: rgba(255, 255, 255, 0.02);
   z-index: 10;
-  transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.track-row-wrapper:hover .track-timeline {
+  transform: translateY(-2px);
 }
 
 .track-row-wrapper.drag-over {
@@ -1612,6 +1610,12 @@ body {
   z-index: 1;
   border-top: 1px solid rgba(255, 255, 255, 0.03);
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.track-row-wrapper:not(:first-child) .track-timeline {
+  margin-top: -8px;
+  padding-top: 8px;
 }
 
 .track-timeline::-webkit-scrollbar {
