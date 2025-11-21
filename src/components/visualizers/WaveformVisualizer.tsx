@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { audioEngine } from '../../lib/audioEngine';
 
 interface WaveformVisualizerProps {
   color: string;
@@ -24,18 +25,20 @@ export function WaveformVisualizer({ color, isActive }: WaveformVisualizerProps)
       ctx.fillStyle = '#000000';
       ctx.fillRect(0, 0, width, height);
 
+      const data = audioEngine.getAnalyserData();
+
       ctx.strokeStyle = color;
       ctx.lineWidth = 2;
       ctx.beginPath();
 
-      const centerY = height / 2;
-      const amplitude = height / 4;
-      const frequency = 0.02;
-      const time = Date.now() * 0.001;
+      const sliceWidth = width / data.length;
 
-      for (let x = 0; x < width; x++) {
-        const y = centerY + Math.sin((x * frequency) + time) * amplitude;
-        if (x === 0) {
+      for (let i = 0; i < data.length; i++) {
+        const v = data[i] / 128.0;
+        const y = (v * height) / 2;
+        const x = i * sliceWidth;
+
+        if (i === 0) {
           ctx.moveTo(x, y);
         } else {
           ctx.lineTo(x, y);
