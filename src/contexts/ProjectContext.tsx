@@ -69,7 +69,7 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
       measures: 4,
       orderIndex: project.tracks.length,
       notes: [],
-      isExpanded: true,
+      isExpanded: false,
       color: trackColor
     };
 
